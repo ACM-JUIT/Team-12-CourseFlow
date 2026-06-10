@@ -1,115 +1,4 @@
-/* *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-.course-page{
-  display:flex;
-  height:100vh;
-  background:#f5f7fb;
-}
-
-
-
-.sidebar{
-  width:320px;
-  background:white;
-  border-right:1px solid #ddd;
-  overflow-y:auto;
-}
-
-.sidebar-header{
-  padding:20px;
-  border-bottom:1px solid #ddd;
-}
-
-.sidebar-header h2{
-  margin-bottom:10px;
-}
-
-.sidebar-header p{
-  color:gray;
-}
-
-.lesson-card{
-  display:flex;
-  gap:15px;
-  padding:20px;
-  cursor:pointer;
-}
-
-.lesson-card:hover{
-  background:#eef4ff;
-}
-
-.lesson-card.active{
-  background:#e8f0ff;
-}
-
-.lesson-number{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  background:#2563eb;
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:bold;
-}
-
-.lesson-card span{
-  color:#2563eb;
-}
-
-
-
-.main-content{
-  flex:1;
-  padding:30px;
-  overflow-y:auto;
-}
-
-.main-content h1{
-  margin-bottom:15px;
-}
-
-.description{
-  margin-bottom:20px;
-  color:#555;
-}
-
-
-.video-container{
-  margin-bottom:30px;
-}
-
-.video-container iframe{
-  width:100%;
-  height:500px;
-  border:none;
-  border-radius:15px;
-}
-
-
-
-.topic-card{
-  background:#eaf4ff;
-  padding:25px;
-  border-radius:15px;
-  margin-bottom:30px;
-}
-
-.topic-card h2{
-  margin-bottom:15px;
-}
-
-.topic-card p{
-  margin-bottom:15px;
-  line-height:1.6;
-} */
- * {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -119,15 +8,11 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-/* ── Layout ─────────────────────────────────────── */
-
 .course-page {
   display: flex;
   height: 100vh;
   background: #f5f7fb;
 }
-
-/* ── Sidebar ─────────────────────────────────────── */
 
 .sidebar {
   width: 300px;
@@ -231,8 +116,6 @@ body {
   opacity: 0.7;
 }
 
-/* ── Main Content ────────────────────────────────── */
-
 .main-content {
   flex: 1;
   padding: 36px 42px;
@@ -262,8 +145,6 @@ body {
 
 }
 
-/* ── Video ───────────────────────────────────────── */
-
 .video-wrapper {
   margin-bottom: 32px;
   max-width: 580px;
@@ -278,9 +159,6 @@ body {
   border-radius: 12px;
   display: block;
 }
-
-/* ── Topic Card ──────────────────────────────────── */
-
 .topic-card {
   background: rgb(239, 248, 251);
   border: 1px solid #e5e9f2;

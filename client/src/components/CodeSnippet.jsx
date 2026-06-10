@@ -1,39 +1,3 @@
-// import React from "react";
-// import "./CodeSnippet.css";
-
-// function CodeSnippet({ code }) {
-
-//   const copyCode = () => {
-//     navigator.clipboard.writeText(code);
-//     alert("Code Copied!");
-//   };
-
-//   return (
-//     <div className="code-container">
-
-//       <div className="code-header">
-
-//         <div className="dots">
-//           <span className="red"></span>
-//           <span className="yellow"></span>
-//           <span className="green"></span>
-//         </div>
-
-//         <button onClick={copyCode}>
-//           Copy
-//         </button>
-
-//       </div>
-
-//       <pre>
-//         <code>{code}</code>
-//       </pre>
-
-//     </div>
-//   );
-// }
-
-// export default CodeSnippet;
 import React, { useState } from "react";
 import "./CodeSnippet.css";
 
