@@ -1,13 +1,13 @@
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions";
 
 function App() {
   return (
     <>
       <Navbar />
 
-      <PrivacyPolicy />
+      <TermsAndConditions />
 
       <Footer />
     </>
