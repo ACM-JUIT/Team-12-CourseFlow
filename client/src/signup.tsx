@@ -6,13 +6,16 @@ interface SignUpProps {
 }
 
 const SignUp: React.FC<SignUpProps> = ({ onSwitch, onSuccess }) => {
+  const [step, setStep] = useState<"details" | "otp">("details")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirm, setConfirm] = useState("")
+  const [otp, setOtp] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [resendCooldown, setResendCooldown] = useState(0)
 
   const passwordStrength = (p: string): { label: string; color: string; width: string } => {
     if (p.length === 0) return { label: "", color: "#334155", width: "0%" }
@@ -23,17 +26,68 @@ const SignUp: React.FC<SignUpProps> = ({ onSwitch, onSuccess }) => {
 
   const strength = passwordStrength(password)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const startCooldown = () => {
+    setResendCooldown(30)
+    const interval = setInterval(() => {
+      setResendCooldown(prev => {
+        if (prev <= 1) { clearInterval(interval); return 0 }
+        return prev - 1
+      })
+    }, 1000)
+  }
+
+  const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     if (password !== confirm) { setError("Passwords do not match"); return }
     if (password.length < 6) { setError("Password must be at least 6 characters"); return }
     setLoading(true)
     try {
+      const res = await fetch("/api/auth/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.message || "Failed to send OTP")
+      setStep("otp")
+      startCooldown()
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleResend = async () => {
+    if (resendCooldown > 0) return
+    setError("")
+    setLoading(true)
+    try {
+      const res = await fetch("/api/auth/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.message || "Failed to resend OTP")
+      startCooldown()
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError("")
+    setLoading(true)
+    try {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, otp }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.message || "Registration failed")
@@ -58,74 +112,118 @@ const SignUp: React.FC<SignUpProps> = ({ onSwitch, onSuccess }) => {
           </div>
           <span style={s.logoText}>CourseFlow</span>
         </div>
-        <h2 style={s.heading}>Create your account</h2>
-        <p style={s.sub}>Start learning at your own pace, for free</p>
-        {error && <div style={s.errorBox}>{error}</div>}
-        <form onSubmit={handleSubmit} style={s.form}>
-          <div style={s.field}>
-            <label style={s.label}>Full Name</label>
-            <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Your name" required style={s.input}
-              onFocus={e => Object.assign(e.target.style, s.inputFocus)} onBlur={e => Object.assign(e.target.style, s.input)} />
-          </div>
-          <div style={s.field}>
-            <label style={s.label}>Email</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" required style={s.input}
-              onFocus={e => Object.assign(e.target.style, s.inputFocus)} onBlur={e => Object.assign(e.target.style, s.input)} />
-          </div>
-          <div style={s.field}>
-            <label style={s.label}>Password</label>
-            <div style={s.passwordWrap}>
-              <input
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                style={{ ...s.input, paddingRight: 44 }}
-                onFocus={e => Object.assign(e.target.style, { ...s.inputFocus, paddingRight: "44px" })}
-                onBlur={e => Object.assign(e.target.style, { ...s.input, paddingRight: "44px" })}
-              />
-              <button type="button" onClick={() => setShowPassword(v => !v)} style={s.eyeBtn} tabIndex={-1}>
-                {showPassword ? (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                    <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22"
-                      stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" />
-                  </svg>
-                ) : (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#94a3b8" strokeWidth="2" />
-                    <circle cx="12" cy="12" r="3" stroke="#94a3b8" strokeWidth="2" />
-                  </svg>
+
+        {step === "details" ? (
+          <>
+            <h2 style={s.heading}>Create your account</h2>
+            <p style={s.sub}>Start learning at your own pace, for free</p>
+            {error && <div style={s.errorBox}>{error}</div>}
+            <form onSubmit={handleSendOtp} style={s.form}>
+              <div style={s.field}>
+                <label style={s.label}>Full Name</label>
+                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Your name" required style={s.input}
+                  onFocus={e => Object.assign(e.target.style, s.inputFocus)} onBlur={e => Object.assign(e.target.style, s.input)} />
+              </div>
+              <div style={s.field}>
+                <label style={s.label}>Email</label>
+                <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" required style={s.input}
+                  onFocus={e => Object.assign(e.target.style, s.inputFocus)} onBlur={e => Object.assign(e.target.style, s.input)} />
+              </div>
+              <div style={s.field}>
+                <label style={s.label}>Password</label>
+                <div style={s.passwordWrap}>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                    style={{ ...s.input, paddingRight: 44 }}
+                    onFocus={e => Object.assign(e.target.style, { ...s.inputFocus, paddingRight: "44px" })}
+                    onBlur={e => Object.assign(e.target.style, { ...s.input, paddingRight: "44px" })}
+                  />
+                  <button type="button" onClick={() => setShowPassword(v => !v)} style={s.eyeBtn} tabIndex={-1}>
+                    {showPassword ? (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22"
+                          stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" />
+                      </svg>
+                    ) : (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#94a3b8" strokeWidth="2" />
+                        <circle cx="12" cy="12" r="3" stroke="#94a3b8" strokeWidth="2" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+                {password.length > 0 && (
+                  <div style={s.strengthWrap}>
+                    <div style={s.strengthTrack}>
+                      <div style={{ ...s.strengthFill, width: strength.width, background: strength.color }} />
+                    </div>
+                    <span style={{ ...s.strengthLabel, color: strength.color }}>{strength.label}</span>
+                  </div>
                 )}
+              </div>
+              <div style={s.field}>
+                <label style={s.label}>Confirm Password</label>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={confirm}
+                  onChange={e => setConfirm(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  style={confirm && confirm !== password ? { ...s.input, borderColor: "#ef4444" } : s.input}
+                  onFocus={e => Object.assign(e.target.style, s.inputFocus)}
+                  onBlur={e => Object.assign(e.target.style, s.input)}
+                />
+                {confirm && confirm !== password && <span style={s.matchError}>Passwords don't match</span>}
+              </div>
+              <button type="submit" style={loading ? { ...s.submitBtn, opacity: 0.7 } : s.submitBtn} disabled={loading}>
+                {loading ? "Sending OTP…" : "Send Verification Code"}
+              </button>
+            </form>
+          </>
+        ) : (
+          <>
+            <h2 style={s.heading}>Check your email</h2>
+            <p style={s.sub}>We sent a 6-digit code to <strong style={{ color: "#f1f5f9" }}>{email}</strong></p>
+            {error && <div style={s.errorBox}>{error}</div>}
+            <form onSubmit={handleVerifyOtp} style={s.form}>
+              <div style={s.field}>
+                <label style={s.label}>Verification Code</label>
+                <input
+                  type="text"
+                  value={otp}
+                  onChange={e => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  placeholder="123456"
+                  required
+                  maxLength={6}
+                  style={{ ...s.input, fontSize: 24, letterSpacing: 8, textAlign: "center" }}
+                  onFocus={e => Object.assign(e.target.style, { ...s.inputFocus, fontSize: "24px", letterSpacing: "8px", textAlign: "center" })}
+                  onBlur={e => Object.assign(e.target.style, { ...s.input, fontSize: "24px", letterSpacing: "8px", textAlign: "center" })}
+                />
+              </div>
+              <button type="submit" style={loading ? { ...s.submitBtn, opacity: 0.7 } : s.submitBtn} disabled={loading}>
+                {loading ? "Verifying…" : "Verify & Create Account"}
+              </button>
+            </form>
+            <div style={s.resendRow}>
+              <span style={{ color: "#64748b", fontSize: 13 }}>Didn't receive it? </span>
+              <button
+                onClick={handleResend}
+                disabled={resendCooldown > 0 || loading}
+                style={{ ...s.switchLink, opacity: resendCooldown > 0 ? 0.4 : 1 }}
+              >
+                {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend code"}
               </button>
             </div>
-            {password.length > 0 && (
-              <div style={s.strengthWrap}>
-                <div style={s.strengthTrack}>
-                  <div style={{ ...s.strengthFill, width: strength.width, background: strength.color }} />
-                </div>
-                <span style={{ ...s.strengthLabel, color: strength.color }}>{strength.label}</span>
-              </div>
-            )}
-          </div>
-          <div style={s.field}>
-            <label style={s.label}>Confirm Password</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              value={confirm}
-              onChange={e => setConfirm(e.target.value)}
-              placeholder="••••••••"
-              required
-              style={confirm && confirm !== password ? { ...s.input, borderColor: "#ef4444" } : s.input}
-              onFocus={e => Object.assign(e.target.style, s.inputFocus)}
-              onBlur={e => Object.assign(e.target.style, s.input)}
-            />
-            {confirm && confirm !== password && <span style={s.matchError}>Passwords don't match</span>}
-          </div>
-          <button type="submit" style={loading ? { ...s.submitBtn, opacity: 0.7 } : s.submitBtn} disabled={loading}>
-            {loading ? "Creating account…" : "Create Account"}
-          </button>
-        </form>
+            <button onClick={() => { setStep("details"); setError(""); setOtp("") }} style={s.backBtn}>
+              ← Change email or details
+            </button>
+          </>
+        )}
+
         <p style={s.switchText}>
           Already have an account?{" "}
           <button onClick={onSwitch} style={s.switchLink}>Sign in</button>
@@ -159,6 +257,8 @@ const s: Record<string, React.CSSProperties> = {
   submitBtn: { marginTop: 6, background: "linear-gradient(135deg, #2563eb, #3b82f6)", color: "#fff", border: "none", borderRadius: 8, padding: "13px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%", letterSpacing: "0.1px" },
   switchText: { marginTop: 22, textAlign: "center", fontSize: 13, color: "#94a3b8" },
   switchLink: { background: "none", border: "none", color: "#3b82f6", cursor: "pointer", fontSize: 13, fontWeight: 500, padding: 0 },
+  resendRow: { display: "flex", justifyContent: "center", alignItems: "center", gap: 4, marginTop: 16 },
+  backBtn: { display: "block", width: "100%", marginTop: 10, background: "none", border: "none", color: "#64748b", fontSize: 13, cursor: "pointer", textAlign: "center" as const, padding: "6px 0" },
 }
 
 export default SignUp
