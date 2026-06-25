@@ -1,3 +1,71 @@
+ /* .code-container {
+  background: #10151d;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 16px;
+  border: 1px solid #1e2a3a;
+}
+
+.code-header {
+  background: #161b22;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid #1e2a3a;
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.dot-red    { background: #ff5f57; }
+.dot-yellow { background: #febc2e; }
+.dot-green  { background: #28c840; }
+
+.copy-btn {
+  background: transparent;
+  color: #aab6c3;
+  border: 1px solid #4c5e6f;
+  padding: 6px 16px 6px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.copy-btn:hover {
+  background: #21262d;
+  color: #e6edf3;
+  border-color: #8b949e;
+}
+
+.copy-btn.copied {
+  color: #3fb950;
+  border-color: #3fb950;
+}
+
+pre {
+  margin: 0;
+  padding: 20px 24px;
+  overflow-x: auto;
+}
+
+code {
+  color: #e6edf3;
+  font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 14px;
+  width: 100%;
+  line-height: 1.75;
+} */
  .code-container {
   background: #10151d;
   border-radius: 12px;
