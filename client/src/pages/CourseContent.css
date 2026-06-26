@@ -47,8 +47,6 @@ body {
   text-transform: uppercase;
 }
 
-/* ── Progress bar (new) ─────────────────────────────────────────── */
-
 .progress-section {
   padding: 16px 20px;
   border-bottom: 1px solid #e5e9f2;
@@ -127,9 +125,13 @@ body {
   position: relative;
 }
 
-/* When a lesson is completed, the number badge turns green with a check (new) */
+
 .lesson-number.completed {
   background: #1fa855;
+}
+.lesson-number.completed svg {
+  width: 30px;
+  height: 22px;
 }
 
 .lesson-info {
@@ -164,8 +166,6 @@ body {
   height: 13px;
   opacity: 0.7;
 }
-
-/* ── Completion checkbox (new) ─────────────────────────────────── */
 
 .complete-checkbox {
   width: 20px;
@@ -213,7 +213,7 @@ body {
   margin-bottom: 13px;
 }
 
-/* Header row holding title + the "mark complete" button (new) */
+
 .lesson-header-row {
   display: flex;
   justify-content: space-between;
@@ -305,7 +305,6 @@ body {
   line-height: 1.7;
 }
 
-/* ── Loading & error states (new) ──────────────────────────────── */
 
 .state-screen {
   flex: 1;

@@ -1,10 +1,8 @@
-
 import React, { useState, useEffect } from "react";
 import "./CourseContent.css";
 import CodeSnippet from "../components/CodeSnippet";
 import { getCourseContent } from "../api/courseApi";
 
-/* ── Clock icon SVG ──────────────────────────────────────────────────── */
 
 function ClockIcon() {
   return (
@@ -23,8 +21,6 @@ function ClockIcon() {
   );
 }
 
-/* ── Check icon SVG (for completed state) ───────────────────────────── */
-
 function CheckIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -32,8 +28,6 @@ function CheckIcon() {
     </svg>
   );
 }
-
-/* ── Component ───────────────────────────────────────────────────────── */
 
 function CourseContent() {
   const [lessons, setLessons] = useState([]);
