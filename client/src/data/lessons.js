@@ -1,11 +1,3 @@
-// src/data/lessons.js
-//
-// This file holds the course content locally for now.
-// Field names (_id, videoUrl, etc.) are chosen to match what Khushi's
-// MongoDB CourseContent model will likely look like — so when the
-// backend is ready, we can swap this file out for a real API call
-// with minimal changes to CourseContent.jsx.
-
 const lessons = [
   {
     _id: 1,
