@@ -5,28 +5,47 @@ export default function OptionsStep({
   return (
     <div className="optionGrid">
 
-      <select>
-        <option>Difficulty</option>
-        <option>Beginner</option>
-        <option>Intermediate</option>
-        <option>Advanced</option>
+      <select
+        value={formData.difficulty}
+        onChange={(e) =>
+          setFormData({ ...formData, difficulty: e.target.value })
+        }
+      >
+        <option value="">Difficulty</option>
+        <option value="Beginner">Beginner</option>
+        <option value="Intermediate">Intermediate</option>
+        <option value="Advanced">Advanced</option>
       </select>
 
-      <select>
-        <option>Duration</option>
-        <option>1 Month</option>
-        <option>2 Months</option>
+      <select
+        value={formData.duration}
+        onChange={(e) =>
+          setFormData({ ...formData, duration: e.target.value })
+        }
+      >
+        <option value="">Duration</option>
+        <option value="1 Month">1 Month</option>
+        <option value="2 Months">2 Months</option>
       </select>
 
-      <select>
-        <option>Add Video</option>
-        <option>Yes</option>
-        <option>No</option>
+      <select
+        value={formData.video}
+        onChange={(e) =>
+          setFormData({ ...formData, video: e.target.value })
+        }
+      >
+        <option value="">Add Video</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
       </select>
 
       <input
         type="number"
         placeholder="Chapters"
+        value={formData.chapters}
+        onChange={(e) =>
+          setFormData({ ...formData, chapters: e.target.value })
+        }
       />
 
     </div>
