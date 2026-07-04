@@ -1,19 +1,28 @@
-import CourseContent from "./pages/CourseContent";
+import { useState } from "react";
+
+import Dashboard from "./pages/Dashboard";
+import DeleteCourses from "./pages/DeleteCourses";
+
+import "./App.css";
 
 function App() {
-  return <CourseContent />;
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
+  const [currentPage, setCurrentPage] =
+    useState("dashboard");
 
-function App() {
+
   return (
     <>
-      <Navbar />
-
-      <PrivacyPolicy />
-
-      <Footer />
+      {currentPage === "dashboard" ? (
+        <Dashboard
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      ) : (
+        <DeleteCourses
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
     </>
   );
 }
