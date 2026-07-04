@@ -1,5 +1,18 @@
-import CoursePage from "./components/CoursePage";
+import CourseContent from "./pages/CourseContent";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
-export default function App() {
-  return <CoursePage />;
+function App() {
+  return (
+    <>
+      <Navbar />
+
+      <PrivacyPolicy />
+
+      <Footer />
+    </>
+  );
 }
+
+export default App;
