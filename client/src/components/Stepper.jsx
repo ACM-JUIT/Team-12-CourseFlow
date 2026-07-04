@@ -3,22 +3,13 @@ export default function Stepper({ currentStep }) {
 
   return (
     <div className="stepper-container">
-      <div className="progress-line"></div>
-
-      <div
-        className="progress-active"
-        style={{
-          width:
-            currentStep === 1
-              ? "0%"
-              : currentStep === 2
-              ? "50%"
-              : "100%",
-        }}
-      ></div>
-
       {steps.map((step, index) => (
-        <div className="step-item" key={index}>
+        <div
+          className={`step-item ${
+            currentStep > index + 1 ? "line-active" : ""
+          }`}
+          key={index}
+        >
           <div
             className={`step-circle ${
               currentStep >= index + 1 ? "active" : ""
@@ -26,7 +17,6 @@ export default function Stepper({ currentStep }) {
           >
             {index + 1}
           </div>
-
           <span>{step}</span>
         </div>
       ))}

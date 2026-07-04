@@ -10,7 +10,7 @@ function Navbar() {
         background: "#fff",
       }}
     >
-      <h2>CourseFlow</h2>
+      <h1>CourseFlow</h1>
 
       <button
         style={{

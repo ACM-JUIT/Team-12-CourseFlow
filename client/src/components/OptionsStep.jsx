@@ -11,7 +11,7 @@ export default function OptionsStep({
           setFormData({ ...formData, difficulty: e.target.value })
         }
       >
-        <option value="">Difficulty</option>
+        <option value="" disabled hidden>Difficulty</option>
         <option value="Beginner">Beginner</option>
         <option value="Intermediate">Intermediate</option>
         <option value="Advanced">Advanced</option>
@@ -23,7 +23,7 @@ export default function OptionsStep({
           setFormData({ ...formData, duration: e.target.value })
         }
       >
-        <option value="">Duration</option>
+        <option value="" disabled hidden>Duration</option>
         <option value="1 Month">1 Month</option>
         <option value="2 Months">2 Months</option>
       </select>
@@ -34,7 +34,7 @@ export default function OptionsStep({
           setFormData({ ...formData, video: e.target.value })
         }
       >
-        <option value="">Add Video</option>
+        <option value="" disabled hidden>Add Video</option>
         <option value="Yes">Yes</option>
         <option value="No">No</option>
       </select>
@@ -42,10 +42,15 @@ export default function OptionsStep({
       <input
         type="number"
         placeholder="Chapters"
+        min="1"
         value={formData.chapters}
-        onChange={(e) =>
-          setFormData({ ...formData, chapters: e.target.value })
-        }
+        onChange={(e) => {
+         const val = e.target.value;
+    
+         if (val === "" || Number(val) > 0) {
+         setFormData({ ...formData, chapters: val });
+          }
+        }}
       />
 
     </div>
