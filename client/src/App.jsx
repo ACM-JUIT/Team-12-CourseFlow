@@ -9,6 +9,7 @@ function App() {
   const [currentPage, setCurrentPage] =
     useState("dashboard");
 
+function App() {
   return (
     <>
       {currentPage === "dashboard" ? (
