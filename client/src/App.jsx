@@ -1,19 +1,14 @@
 import CourseContent from "./pages/CourseContent";
 
-function App() {
-  return <CourseContent />;
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
+
+
 
 function App() {
   return (
     <>
-      <Navbar />
+     
+      <CourseContent />
 
-      <PrivacyPolicy />
-
-      <Footer />
     </>
   );
 }
