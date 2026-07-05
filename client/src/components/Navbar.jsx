@@ -1,4 +1,4 @@
-function Navbar() {
+function Navbar({ setCurrentPage }) {
   return (
     <nav
       style={{
@@ -13,6 +13,7 @@ function Navbar() {
       <h1>CourseFlow</h1>
 
       <button
+        onClick={() => setCurrentPage("dashboard")}
         style={{
           background: "#2563eb",
           color: "#fff",

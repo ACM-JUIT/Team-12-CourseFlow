@@ -1,9 +1,15 @@
-export default function Stepper({ currentStep }) {
-  const steps = ["Category", "Topic", "Options"];
+import { Shapes, Lightbulb, SlidersHorizontal } from "lucide-react";
 
+const steps = [
+  { label: "Category", Icon: Shapes },
+  { label: "Topic", Icon: Lightbulb },
+  { label: "Options", Icon: SlidersHorizontal },
+];
+
+export default function Stepper({ currentStep }) {
   return (
     <div className="stepper-container">
-      {steps.map((step, index) => (
+      {steps.map(({ label, Icon }, index) => (
         <div
           className={`step-item ${
             currentStep > index + 1 ? "line-active" : ""
@@ -15,9 +21,10 @@ export default function Stepper({ currentStep }) {
               currentStep >= index + 1 ? "active" : ""
             }`}
           >
-            {index + 1}
+            <Icon size={24} strokeWidth={2} />
           </div>
-          <span>{step}</span>
+          <span className="step-label">{label}</span>
+          <span className="step-substep">Step {index + 1}</span>
         </div>
       ))}
     </div>

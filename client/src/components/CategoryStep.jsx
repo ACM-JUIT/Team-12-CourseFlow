@@ -1,8 +1,8 @@
 const categories = [
-  "Coding",
-  "Health",
-  "Creative",
-  "Business",
+  { name: "Coding", icon: "💻" },
+  { name: "Health", icon: "🩺" },
+  { name: "Creative", icon: "🎨" },
+  { name: "Business", icon: "📊" },
 ];
 
 export default function CategoryStep({
@@ -17,20 +17,21 @@ export default function CategoryStep({
 
         {categories.map((cat) => (
           <div
-            key={cat}
+            key={cat.name}
             className={`box ${
-              formData.category === cat
+              formData.category === cat.name
                 ? "selected"
                 : ""
             }`}
             onClick={() =>
               setFormData({
                 ...formData,
-                category: cat,
+                category: cat.name,
               })
             }
           >
-            {cat}
+            <div className="box-icon">{cat.icon}</div>
+            <div className="box-label">{cat.name}</div>
           </div>
         ))}
 

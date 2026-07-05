@@ -4,7 +4,7 @@ import CategoryStep from "../components/CategoryStep";
 import TopicStep from "../components/TopicStep";
 import OptionsStep from "../components/OptionsStep";
 import { createCourse, updateCourse, publishCourse } from "../api/courseApi";
-import "../App.css";
+import "./CreateCourse.css";
 
 export default function CreateCourse() {
   const [step, setStep] = useState(1);
@@ -87,7 +87,7 @@ export default function CreateCourse() {
   };
 
   return (
-    <div className="container">
+    <div className="create-course-page">
       <div className="card">
 
         <h1>Create Course</h1>

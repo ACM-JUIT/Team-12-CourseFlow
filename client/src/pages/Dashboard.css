@@ -1,0 +1,144 @@
+/* ===== Dashboard.css ===== */
+
+body {
+  margin: 0;
+  background: #f5f6fb;
+  font-family: Arial, sans-serif;
+}
+
+.content {
+  flex: 1;
+  padding: 30px 40px;
+}
+
+.top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-title {
+  font-size: 28px;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.page-subtitle {
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 15px;
+}
+
+.create-btn {
+  border: none;
+  padding: 12px 22px;
+  border-radius: 12px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.notification,
+.profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.notification {
+  background: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.profile {
+  background: #2563eb;
+  color: white;
+  font-weight: 700;
+}
+
+.hero-card {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.hero-icon {
+  font-size: 60px;
+  margin-bottom: 18px;
+}
+
+.hero-card h2 {
+  color: #0f172a;
+  margin-bottom: 12px;
+}
+
+.hero-card p {
+  max-width: 500px;
+  margin: auto;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.secondary-btn {
+  margin-top: 22px;
+  border: none;
+  background: #dbeafe;
+  color: #2563eb;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.activity-card {
+  margin-top: 24px;
+  background: white;
+  padding: 24px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.activity-card h3 {
+  font-size: 22px;
+}
+
+.activity-card p {
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 15px;
+}
+
+.course-card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  margin-top: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.delete-btn {
+  border: none;
+  background: #ef4444;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+}
