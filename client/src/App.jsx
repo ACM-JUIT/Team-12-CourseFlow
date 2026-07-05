@@ -1,24 +1,7 @@
-import CourseContent from "./pages/CourseContent";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
+import CoursePage from "./components/CoursePage";
 
 function App() {
-  return (
-    <>
-      {currentPage === "dashboard" ? (
-        <Dashboard
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
-      ) : (
-        <DeleteCourses
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
-      )}
-    </>
-  );
+  return <CoursePage />;
 }
 
 export default App;
