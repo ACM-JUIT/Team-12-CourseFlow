@@ -6,11 +6,17 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 function App() {
   return (
     <>
-      <Navbar />
-
-      <PrivacyPolicy />
-
-      <Footer />
+      {currentPage === "dashboard" ? (
+        <Dashboard
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      ) : (
+        <DeleteCourses
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
     </>
   );
 }
