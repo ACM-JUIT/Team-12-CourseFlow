@@ -1,8 +1,4 @@
 import CourseContent from "./pages/CourseContent";
-
-
-
-
 function App() {
   return (
     <>
