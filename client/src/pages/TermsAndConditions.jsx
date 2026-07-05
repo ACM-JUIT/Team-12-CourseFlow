@@ -5,7 +5,7 @@ function TermsAndConditions() {
         maxWidth: "900px",
         margin: "50px auto",
         padding: "30px",
-        color: "#fff",
+        color: "#a53a3a",
       }}
     >
       <h1>Terms & Conditions</h1>
