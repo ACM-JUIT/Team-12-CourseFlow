@@ -1,18 +1,10 @@
-<<<<<<< HEAD
 function App() {
   return <LandingPage />;
 }
-=======
-import CourseContent from "./pages/CourseContent";
-
-
-
->>>>>>> origin/dev-diksha
 
 function LandingPage() {
   return (
     <>
-<<<<<<< HEAD
       <Header />
       <main>
         <Hero />
@@ -22,11 +14,6 @@ function LandingPage() {
         <CTA />
       </main>
       <Footer />
-=======
-     
-      <CourseContent />
-
->>>>>>> origin/dev-diksha
     </>
   )
 }

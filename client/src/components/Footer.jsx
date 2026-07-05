@@ -2,16 +2,43 @@ function Footer() {
   return (
     <footer
       style={{
-        borderTop: "1px solid #ddd",
+        borderTop: "1px solid #333",
         padding: "40px",
         marginTop: "60px",
+        textAlign: "center",
+        color: "#ccc",
       }}
     >
-      <h3>CourseFlow</h3>
+      <h2>CourseFlow</h2>
 
       <p>Developer: Rushil Sharma</p>
 
-      <p>© 2026 CourseFlow™. All Rights Reserved.</p>
+      <p style={{ marginTop: "15px" }}>
+        <a
+          href="#"
+          style={{
+            color: "#4f8cff",
+            textDecoration: "none",
+            marginRight: "20px",
+          }}
+        >
+          Privacy Policy
+        </a>
+
+        <a
+          href="#"
+          style={{
+            color: "#4f8cff",
+            textDecoration: "none",
+          }}
+        >
+          Terms & Conditions
+        </a>
+      </p>
+
+      <p style={{ marginTop: "20px" }}>
+        © 2026 CourseFlow™. All Rights Reserved.
+      </p>
     </footer>
   );
 }
