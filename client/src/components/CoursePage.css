@@ -1,0 +1,324 @@
+/* ── Reset & Base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #f1f5f9;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.cp-page {
+  min-height: 100vh;
+  background: #f1f5f9;
+  padding: 20px 24px 40px;
+  color: #111827;
+  max-width: 1100px;
+  margin: 40px auto;
+}
+
+/* ── Card ─────────────────────────────────────────────────────────────────── */
+.cp-card {
+  background: white;
+  border-radius: 24px;
+  padding: 25px;
+  margin-bottom: 28px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+/* ── Hero ─────────────────────────────────────────────────────────────────── */
+.cp-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+
+.cp-hero-left {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.cp-hero-right {
+    flex-shrink: 0;
+    width: 370px;
+}
+
+.cp-course-img {
+    width: 100%;
+    height: 240px;
+    object-fit: contain;
+    background: #dbeafe;
+    border-radius: 18px;
+    padding: 30px;
+}
+.cp-title {
+    font-size: 2.5rem;
+    font-weight: 550;
+    line-height: 1.2;
+    text-align: center;
+    margin-bottom: 16px;
+}
+.cp-title {
+    position: relative;
+    margin-bottom: 32px;
+}
+
+.cp-desc {
+    text-align: center;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #475569;
+    margin-bottom: 13px;
+}
+/* ── Category Tag ─────────────────────────────────────────────────────────── */
+.cp-category {
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: #2563eb;
+}
+
+/* ── Start Button ─────────────────────────────────────────────────────────── */
+.cp-start-btn{
+    width: 180px;
+    height:50px;
+
+    background:#2563eb;
+    color:white;
+
+    border:none;
+    border-radius:14px;
+
+    font-size:18px;
+    font-weight:600;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.cp-start-btn:hover{
+    background:#1d4ed8;
+}
+
+/* ── Stats ────────────────────────────────────────────────────────────────── */
+.cp-stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    text-align:center;
+}
+
+.cp-stat-item{
+    padding:30px 20px;
+    border-right:1px solid #e5e7eb;
+}
+
+.cp-stat-item:last-child{
+    border-right:none;
+}
+
+.cp-stat-icon {
+  line-height: 0;
+  opacity: 0.85;
+}
+
+.cp-stat-label {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+}
+
+.cp-stat-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* ── Course URL ───────────────────────────────────────────────────────────── */
+.cp-url-label {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 14px;
+}
+
+.cp-url-row{
+    display:flex;
+    gap:15px;
+    margin-top:15px;
+}
+
+.cp-url-box{
+    flex:1;
+
+    border:1px solid #d1d5db;
+    border-radius:12px;
+
+    padding:18px;
+    background:#f8fafc;
+}
+
+.cp-copy-btn{
+    width:60px;
+    height:60px;
+
+    border:none;
+    border-radius:12px;
+
+    background:#2563eb;
+    color:white;
+
+    cursor:pointer;
+}
+
+.cp-copy-btn:hover{
+    background:#1d4ed8;
+}
+.cp-copy-btn.cp-copied {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #16a34a;
+}
+
+/* ── Chapters ─────────────────────────────────────────────────────────────── */
+.cp-chapters-heading {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 22px;
+  letter-spacing: -0.2px;
+}
+
+.cp-chapters-list{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.cp-chapter-card{
+    display:flex;
+    gap:20px;
+
+    padding:24px;
+
+    border-radius:18px;
+
+    background:#f8fafc;
+
+    transition:.3s;
+}
+
+.cp-chapter-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+.cp-chapter-num{
+    width:60px;
+    height:60px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+    color:white;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:24px;
+    font-weight:bold;
+}
+
+.cp-chapter-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.cp-chapter-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.4;
+}
+
+.cp-chapter-desc {
+  font-size: 0.855rem;
+  color: #64748b;
+  line-height: 1.68;
+}
+
+.cp-chapter-duration {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #2563eb;
+  font-size: 0.835rem;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+/* ── Loading / Error ──────────────────────────────────────────────────────── */
+.cp-center {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #64748b;
+}
+
+.cp-spinner {
+  width: 42px;
+  height: 42px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.cp-error { color: #dc2626; }
+.cp-error button {
+  padding: 11px 28px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 820px) {
+  .cp-hero { flex-direction: column-reverse; gap: 24px; }
+  .cp-hero-right { width: 100%; }
+  .cp-course-img { height: 180px; }
+  .cp-start-btn { max-width: 100%; }
+  .cp-enroll-success { max-width: 100%; }
+}
+
+@media (max-width: 600px) {
+  .cp-page { padding: 20px 14px 60px; }
+  .cp-card { padding: 22px 18px; }
+  .cp-stats { grid-template-columns: repeat(2, 1fr); }
+  .cp-stat-item:nth-child(2) { border-right: none; }
+  .cp-stat-item:nth-child(1),
+  .cp-stat-item:nth-child(2) { border-bottom: 1px solid #e2e8f0; padding-bottom: 20px; }
+  .cp-stat-item:nth-child(3),
+  .cp-stat-item:nth-child(4) { padding-top: 20px; }
+  .cp-title { font-size: 1.3rem; }
+  .cp-chapter-card { padding: 16px 14px; gap: 14px; }
+}
