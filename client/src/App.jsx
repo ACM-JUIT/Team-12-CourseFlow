@@ -1,15 +1,5 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import CoursePage from "./components/CoursePage";
-
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/course" element={<CoursePage />} />
-      </Routes>
-    </BrowserRouter>
-  );
+  return <LandingPage />;
 }
 
 function LandingPage() {
