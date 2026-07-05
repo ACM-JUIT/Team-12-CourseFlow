@@ -50,7 +50,49 @@ app.delete("/api/courses/delete/:id", (req, res) => {
     message: `Course ${courseId} deleted successfully`,
   });
 });
-
+app.get("/api/courses/:id", (req, res) => {
+  res.json({
+    success: true,
+    data: {
+      id: req.params.id,
+      title: "Intermediate C++ Programming Mastery",
+      description:
+        "This course provides a comprehensive dive into intermediate C++ concepts for learners familiar with basics. You'll explore object-oriented programming memory management, templates, and the STL through practical examples. Hands-on exercises reinforce key techniques for efficient coding. By the end, you'll be equipped to build robust C++ applications.",
+      category: "Coding",
+      image: "https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg",
+      skillLevel: "Intermediate",
+      duration: "2 Hours",
+      chaptersCount: 4,
+      videosIncluded: true,
+      chapters: [
+        {
+          id: 1,
+          title: "Object-Oriented Programming",
+          description: "Learn encapsulation, inheritance, and polymorphism principles. Design classes with constructors specifiers.Implement abstract classes and interfaces for modular code. Apply OOF and access concepts to solve real-world problems efficiently.",
+          duration: "25 mins"
+        },
+        {
+          id: 2,
+          title: "Memory Management and Pointers",
+          description: "Master dynamic memory allocation using new and deleteUnderstand pointer arithmetic and reference variables. Explore smar pointers to prevent memory leaks. Practice safe memory handling techniques through coding scenarios",
+          duration: "35 mins"
+        },
+        {
+          id: 3,
+          title: "Templates and Generic Programming",
+          description: "Create reusable code with function and class templates. Implement template specialization for edge cases Understand type deduction and variadic templates- Apply generic programming to build flexible algorithms.",
+          duration: "30 mins"
+        },
+        {
+          id: 4,
+          title: "STL and Practical Projects",
+          description: "Apply all the concepts learned by building a complete C++ application. Learn debugging techniques, code optimization, and industry-standard coding practices for writing clean and maintainable programs.",
+          duration: "40 mins"
+        }
+      ]
+    }
+  });
+});
 // Start Server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
