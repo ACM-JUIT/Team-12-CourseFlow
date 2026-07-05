@@ -9,7 +9,7 @@ function Footer() {
     >
       <h3>CourseFlow</h3>
 
-      <p>Developer: Rushil Sharma</p>
+      <p>Developer: Team 11-12 OSO</p>
 
       <p>© 2026 CourseFlow™. All Rights Reserved.</p>
     </footer>
