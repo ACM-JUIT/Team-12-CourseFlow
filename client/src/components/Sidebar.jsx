@@ -6,6 +6,7 @@ import {
   LogOut,
   Layers3,
 } from "lucide-react";
+import "./Sidebar.css";
 
 function Sidebar({ currentPage, setCurrentPage }) {
   return (
@@ -44,7 +45,7 @@ function Sidebar({ currentPage, setCurrentPage }) {
 
         <li
           className={currentPage === "delete" ? "active" : ""}
-          onClick={() => setCurrentPage("delete")}
+          onClick={() => setCurrentPage("delete-course")}
         >
           <Trash2 size={20} />
           <span>Delete Courses</span>

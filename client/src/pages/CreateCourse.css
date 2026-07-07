@@ -1,0 +1,207 @@
+.create-course-page {
+  background: #f4f7fc;
+  min-height: 100vh;
+  padding: 50px;
+}
+
+.create-course-page .card {
+  max-width: 1200px;
+  margin: auto;
+  background: white;
+  border-radius: 25px;
+  padding: 50px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.create-course-page .card h1 {
+  color: #111827;
+  font-size: 40px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.create-course-page .card h2 {
+  color: #111827;
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* Stepper (numbered circles + connecting line) */
+
+.stepper-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  margin: 24px 0;
+}
+
+.step-item {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* base grey connecting line */
+.step-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  width: 100%;
+  height: 3px;
+  background: #d9d9d9;
+  z-index: 0;
+}
+
+/* blue fill line that animates in on completion */
+.step-item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  width: 100%;
+  height: 3px;
+  background: #3366ff;
+  z-index: 1;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+
+.step-item.line-active:not(:last-child)::before {
+  transform: scaleX(1);
+}
+
+.step-circle {
+  position: relative;
+  z-index: 1;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #d9d9d9;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  font-weight: bold;
+  transition: background 0.4s ease, transform 0.4s ease;
+}
+
+.step-circle.active {
+  background: #3366ff;
+  transform: scale(1.05);
+}
+
+.step-label {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #64748b;
+  transition: color 0.4s ease;
+}
+
+.step-substep {
+  margin-top: 2px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.step-circle.active + .step-label {
+  color: #2563eb;
+}
+
+/* Category / option grid */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.optionGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  background: white;
+  color: #111827;
+  border: 2px solid #d1d5db;
+  border-radius: 15px;
+  cursor: pointer;
+  text-align: center;
+  padding: 30px 20px;
+  transition: 0.3s;
+}
+
+.box:hover {
+  border-color: #2563eb;
+  transform: translateY(-3px);
+}
+
+.box.selected {
+  border-color: #2563eb;
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+}
+
+.box-icon {
+  font-size: 44px;
+  line-height: 1;
+  margin-bottom: 14px;
+}
+
+.box-label {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Form fields */
+
+.create-course-page input,
+.create-course-page textarea,
+.create-course-page select {
+  width: 100%;
+  padding: 15px;
+  margin-top: 15px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: white;
+  color: #111827;
+}
+
+/* Footer buttons (Back / Next) */
+
+.btns {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.create-course-page .btns button {
+  padding: 12px 30px !important;
+  border: none !important;
+  background: #2563eb !important;
+  color: white !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+}
+
+.create-course-page .btns button:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}

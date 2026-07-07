@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import App from './App'
+import AppDashboard from './AppDashboard'
 import AuthPage from './AuthPage'
 import CoursePage from './components/CoursePage'
 import Navbar from './components/Navbar'
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/course" element={<CoursePage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/course-content" element={<CourseContent />} />
+        <Route path="/dashboard" element={<AppDashboard />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

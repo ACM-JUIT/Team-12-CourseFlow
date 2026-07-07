@@ -1,28 +1,53 @@
-const express = require("express")
-const cors = require("cors")
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
-const nodemailer = require("nodemailer")
+const express = require("express");
+const cors = require("cors");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+const dotenv = require("dotenv");
 
-const app = express()
-const PORT = 5000
-const JWT_SECRET = "courseflow_secret_change_in_production"
+const connectDB = require("./config/db");
+const courseRoutes = require("./routes/courseRoutes");
 
-const GMAIL_USER = "nandinigarg2602@gmail.com"
-const GMAIL_APP_PASSWORD = "gqkwitfjnvkkzdmy"
+dotenv.config();
+connectDB();
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+const JWT_SECRET = "courseflow_secret_change_in_production";
+
+const GMAIL_USER = "nandinigarg2602@gmail.com";
+const GMAIL_APP_PASSWORD = "gqkwitfjnvkkzdmy";
 
 // Middleware
-app.use(cors({ origin: function(origin, callback) { callback(null, true) }, credentials: true }))
-app.use(express.json())
+app.use(cors({ origin: function(origin, callback) { callback(null, true) }, credentials: true }));
+app.use(express.json());
 
-// --- IN-MEMORY DATA ---
-const users = []
-const otpStore = {}
+// New Mongo-backed course routes (from dev-Ishant)
+app.use("/api/courses", courseRoutes);
+
+// --- IN-MEMORY DATA (existing dashboard/course demo data) ---
+const users = [];
+const otpStore = {};
 
 let dummyCourses = [
-  { id: "1", title: "React Basics for Beginners", instructor: "Kritika Grover", createdBy: "kritika@gmail.com" },
-  { id: "2", title: "Node.js & Express Advanced", instructor: "Senior Developer", createdBy: "senior@gmail.com" },
-  { id: "3", title: "AI Course Generation Guide", instructor: "Kritika Grover", createdBy: "kritika@gmail.com" }
+  {
+    id: "1",
+    title: "React Basics for Beginners",
+    instructor: "Kritika Grover",
+    createdBy: "kritika@gmail.com",
+  },
+  {
+    id: "2",
+    title: "Node.js & Express Advanced",
+    instructor: "Senior Developer",
+    createdBy: "senior@gmail.com",
+  },
+  {
+    id: "3",
+    title: "AI Course Generation Guide",
+    instructor: "Kritika Grover",
+    createdBy: "kritika@gmail.com",
+  },
 ];
 
 const transporter = nodemailer.createTransport({
@@ -31,16 +56,16 @@ const transporter = nodemailer.createTransport({
     user: GMAIL_USER,
     pass: GMAIL_APP_PASSWORD,
   },
-})
+});
 
 const generateToken = (user) =>
   jwt.sign(
     { id: user.id, email: user.email, name: user.name },
     JWT_SECRET,
     { expiresIn: "7d" }
-  )
+  );
 
-const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString()
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
 // Home Route
 app.get("/", (req, res) => {
@@ -50,17 +75,17 @@ app.get("/", (req, res) => {
 // --- AUTH ROUTES ---
 app.post("/api/auth/send-otp", async (req, res) => {
   try {
-    const { email } = req.body
-    if (!email) return res.status(400).json({ message: "Email is required" })
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: "Email is required" });
 
-    const existing = users.find((u) => u.email === email.toLowerCase())
-    if (existing) return res.status(409).json({ message: "An account with this email already exists" })
+    const existing = users.find((u) => u.email === email.toLowerCase());
+    if (existing) return res.status(409).json({ message: "An account with this email already exists" });
 
-    const otp = generateOTP()
+    const otp = generateOTP();
     otpStore[email.toLowerCase()] = {
       otp,
       expiresAt: Date.now() + 10 * 60 * 1000,
-    }
+    };
 
     await transporter.sendMail({
       from: `"CourseFlow Team" <${GMAIL_USER}>`,
@@ -76,106 +101,113 @@ app.post("/api/auth/send-otp", async (req, res) => {
           <p style="color: #94a3b8; font-size: 13px; margin-top: 24px;">If you didn't request this, ignore this email.</p>
         </div>
       `,
-    })
+    });
 
-    res.json({ message: "OTP sent successfully" })
+    res.json({ message: "OTP sent successfully" });
   } catch (err) {
-    console.error(err)
-    res.status(500).json({ message: "Failed to send OTP. Check your Gmail config." })
+    console.error(err);
+    res.status(500).json({ message: "Failed to send OTP. Check your Gmail config." });
   }
-})
+});
 
 app.post("/api/auth/register", async (req, res) => {
   try {
-    const { name, email, password, otp } = req.body
+    const { name, email, password, otp } = req.body;
 
     if (!name || !email || !password || !otp)
-      return res.status(400).json({ message: "All fields are required" })
+      return res.status(400).json({ message: "All fields are required" });
 
     if (password.length < 6)
-      return res.status(400).json({ message: "Password must be at least 6 characters" })
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
 
-    const stored = otpStore[email.toLowerCase()]
-    if (!stored) return res.status(400).json({ message: "OTP not found. Please request a new one." })
+    const stored = otpStore[email.toLowerCase()];
+    if (!stored) return res.status(400).json({ message: "OTP not found. Please request a new one." });
     if (Date.now() > stored.expiresAt) {
-      delete otpStore[email.toLowerCase()]
-      return res.status(400).json({ message: "OTP has expired. Please request a new one." })
+      delete otpStore[email.toLowerCase()];
+      return res.status(400).json({ message: "OTP has expired. Please request a new one." });
     }
-    if (stored.otp !== otp) return res.status(400).json({ message: "Incorrect OTP" })
+    if (stored.otp !== otp) return res.status(400).json({ message: "Incorrect OTP" });
 
-    delete otpStore[email.toLowerCase()]
+    delete otpStore[email.toLowerCase()];
 
-    const existing = users.find((u) => u.email === email.toLowerCase())
-    if (existing) return res.status(409).json({ message: "An account with this email already exists" })
+    const existing = users.find((u) => u.email === email.toLowerCase());
+    if (existing) return res.status(409).json({ message: "An account with this email already exists" });
 
-    const passwordHash = await bcrypt.hash(password, 10)
+    const passwordHash = await bcrypt.hash(password, 10);
     const user = {
       id: Date.now().toString(),
       name: name.trim(),
       email: email.toLowerCase().trim(),
       passwordHash,
-    }
-    users.push(user)
+    };
+    users.push(user);
 
-    const token = generateToken(user)
-    res.status(201).json({ token, user: { id: user.id, name: user.name, email: user.email } })
+    const token = generateToken(user);
+    res.status(201).json({ token, user: { id: user.id, name: user.name, email: user.email } });
   } catch (err) {
-    console.error(err)
-    res.status(500).json({ message: "Server error. Please try again." })
+    console.error(err);
+    res.status(500).json({ message: "Server error. Please try again." });
   }
-})
+});
 
 app.post("/api/auth/login", async (req, res) => {
   try {
-    const { email, password } = req.body
-    if (!email || !password) return res.status(400).json({ message: "Email and password are required" })
+    const { email, password } = req.body;
+    if (!email || !password) return res.status(400).json({ message: "Email and password are required" });
 
-    const user = users.find((u) => u.email === email.toLowerCase().trim())
-    if (!user) return res.status(401).json({ message: "No account found with this email" })
+    const user = users.find((u) => u.email === email.toLowerCase().trim());
+    if (!user) return res.status(401).json({ message: "No account found with this email" });
 
-    const valid = await bcrypt.compare(password, user.passwordHash)
-    if (!valid) return res.status(401).json({ message: "Incorrect password" })
+    const valid = await bcrypt.compare(password, user.passwordHash);
+    if (!valid) return res.status(401).json({ message: "Incorrect password" });
 
-    const token = generateToken(user)
-    res.json({ token, user: { id: user.id, name: user.name, email: user.email } })
+    const token = generateToken(user);
+    res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
   } catch (err) {
-    console.error(err)
-    res.status(500).json({ message: "Server error. Please try again." })
+    console.error(err);
+    res.status(500).json({ message: "Server error. Please try again." });
   }
-})
+});
 
 app.get("/api/auth/me", (req, res) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1]
-    if (!token) return res.status(401).json({ message: "No token provided" })
-    const decoded = jwt.verify(token, JWT_SECRET)
-    res.json({ user: decoded })
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ message: "No token provided" });
+    const decoded = jwt.verify(token, JWT_SECRET);
+    res.json({ user: decoded });
   } catch {
-    res.status(401).json({ message: "Invalid or expired token" })
+    res.status(401).json({ message: "Invalid or expired token" });
   }
-})
+});
 
-// --- DASHBOARD / COURSE ROUTES ---
+// --- DASHBOARD / COURSE ROUTES (demo in-memory data) ---
 app.get("/api/dashboard/courses", (req, res) => {
   const userEmail = req.query.email;
 
   if (!userEmail) {
-    return res.status(400).json({ success: false, message: "User email is required" });
+    return res.status(400).json({
+      success: false,
+      message: "User email is required",
+    });
   }
 
-  const userSpecificCourses = dummyCourses.filter(course => course.createdBy === userEmail);
+  const userSpecificCourses = dummyCourses.filter(
+    (course) => course.createdBy === userEmail
+  );
 
   res.json({
     success: true,
     totalCourses: userSpecificCourses.length,
-    courses: userSpecificCourses
+    courses: userSpecificCourses,
   });
 });
 
 app.delete("/api/courses/delete/:id", (req, res) => {
   const courseId = req.params.id;
 
-  dummyCourses = dummyCourses.filter(course => course.id !== courseId);
+  dummyCourses = dummyCourses.filter(
+    (course) => course.id !== courseId
+  );
 
   res.json({
     success: true,

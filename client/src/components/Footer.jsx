@@ -11,7 +11,7 @@ function Footer() {
     >
       <h2>CourseFlow</h2>
 
-      <p>Developer: Rushil Sharma</p>
+      <p>Developer: Team 11-12 OSO</p>
 
       <p style={{ marginTop: "15px" }}>
         <a

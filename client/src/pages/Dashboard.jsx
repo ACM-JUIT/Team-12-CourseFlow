@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
+import "./Dashboard.css";
 
 function Dashboard({
   currentPage,
@@ -52,7 +53,10 @@ function Dashboard({
           </div>
 
           <div className="top-actions">
-            <button className="create-btn">
+            <button
+              className="create-btn"
+              onClick={() => setCurrentPage("create-course")}
+            >
               + Create AI Course
             </button>
             <div className="notification">🔔</div>
@@ -74,13 +78,13 @@ function Dashboard({
           ) : (
             <div style={{ marginTop: "15px" }}>
               {courses.map((course) => (
-                <div 
-                  key={course.id} 
-                  style={{ 
-                    padding: "10px", 
-                    borderBottom: "1px solid #eee", 
-                    display: "flex", 
-                    justifyContent: "space-between" 
+                <div
+                  key={course.id}
+                  style={{
+                    padding: "10px",
+                    borderBottom: "1px solid #eee",
+                    display: "flex",
+                    justifyContent: "space-between"
                   }}
                 >
                   <div>
