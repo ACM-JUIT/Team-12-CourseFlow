@@ -5,9 +5,9 @@
 }
 
 .privacy-content {
-  max-width: 1200px;
-  margin: auto;
-  padding: 60px 20px;
+  width: 100%;
+  max-width: none;
+  padding: 60px 40px;
 }
 
 .privacy-content h1 {
