@@ -1,12 +1,24 @@
-const express=require('express');
-const app=express();
-const bodyParser=require('body-parser');
-const PORT=5000;
+const express = require("express");
+const bodyParser = require("body-parser");
+const dotenv = require("dotenv");
+const connectDB = require("./config/db");
 
-app.listen(PORT,()=>{
-    console.log(`Server is running on port ${PORT}`);
+dotenv.config();
+
+const app = express();
+
+// Connect Database
+connectDB();
+
+// Middleware
+app.use(bodyParser.json());
+
+const PORT = process.env.PORT || 5000;
+
+app.get("/", (req, res) => {
+  res.send("CourseFlow Backend");
 });
 
-app.get('/',(req,res)=>{
-    res.send('CourseFlow Backend');
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

@@ -1,122 +1,102 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { Routes, Route } from "react-router-dom";
+import About from "./pages/About";
+import Footer from "./components/Footer";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function Home() {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div style={{ textAlign: "center", padding: "100px 20px" }}>
+      
+      {/* HERO */}
+      <h1 style={{
+        fontSize: "48px",
+        background: "linear-gradient(to right, #60a5fa, #a78bfa)",
+        WebkitBackgroundClip: "text",
+        color: "transparent"
+      }}>
+        CourseFlow 🚀
+      </h1>
 
-      <div className="ticks"></div>
+      <p style={{ maxWidth: "600px", margin: "20px auto" }}>
+        Learn smarter, grow faster, and track your progress like never before.
+      </p>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      <button style={btn}>
+        Get Started 
+      </button>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      {/* FEATURES */}
+      <div style={{ marginTop: "80px" }}>
+        <h2> Features</h2>
+
+        <div style={grid}>
+          {features.map((item, i) => (
+            <div
+              key={i}
+              className="glass"
+              style={card}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-10px) scale(1.05)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0) scale(1)";
+              }}
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  );
 }
 
-export default App
+const features = [
+  "Smart Learning",
+  "Progress Tracking",
+  "Goal Setting",
+  "Skill Growth"
+];
+
+const grid = {
+  display: "flex",
+  justifyContent: "center",
+  gap: "25px",
+  flexWrap: "wrap",
+  marginTop: "30px"
+};
+
+const card = {
+  padding: "25px",
+  width: "200px",
+  cursor: "pointer"
+};
+
+const btn = {
+  padding: "14px 35px",
+  border: "none",
+  borderRadius: "999px",
+  background: "linear-gradient(to right, #3b82f6, #8b5cf6)",
+  color: "white",
+  fontSize: "16px",
+  cursor: "pointer",
+  boxShadow: "0 0 20px rgba(99,102,241,0.5)"
+};
+
+function App() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      
+      <div style={{ flex: 1 }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </div>
+
+      <Footer />
+    </div>
+  );
+}
+
+export default App;
