@@ -6,10 +6,8 @@ import DeleteCourses from "./pages/DeleteCourses";
 import "./App.css";
 
 function App() {
-  const [currentPage, setCurrentPage] =
-    useState("dashboard");
+  const [currentPage, setCurrentPage] = useState("dashboard");
 
-function App() {
   return (
     <>
       {currentPage === "dashboard" ? (
