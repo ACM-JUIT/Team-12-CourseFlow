@@ -1,12 +1,7 @@
-import React, { useState } from "react"
+import { useState } from "react"
 
-interface SignUpProps {
-  onSwitch: () => void
-  onSuccess?: (token: string) => void
-}
-
-const SignUp: React.FC<SignUpProps> = ({ onSwitch, onSuccess }) => {
-  const [step, setStep] = useState<"details" | "otp">("details")
+function SignUp({ onSwitch, onSuccess }) {
+  const [step, setStep] = useState("details")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -17,7 +12,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSwitch, onSuccess }) => {
   const [error, setError] = useState("")
   const [resendCooldown, setResendCooldown] = useState(0)
 
-  const passwordStrength = (p: string): { label: string; color: string; width: string } => {
+  const passwordStrength = (p) => {
     if (p.length === 0) return { label: "", color: "#334155", width: "0%" }
     if (p.length < 6) return { label: "Weak", color: "#ef4444", width: "33%" }
     if (p.length < 10 || !/[A-Z]/.test(p) || !/[0-9]/.test(p)) return { label: "Fair", color: "#f59e0b", width: "66%" }
@@ -36,7 +31,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSwitch, onSuccess }) => {
     }, 1000)
   }
 
-  const handleSendOtp = async (e: React.FormEvent) => {
+  const handleSendOtp = async (e) => {
     e.preventDefault()
     setError("")
     if (password !== confirm) { setError("Passwords do not match"); return }
@@ -52,7 +47,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSwitch, onSuccess }) => {
       if (!res.ok) throw new Error(data.message || "Failed to send OTP")
       setStep("otp")
       startCooldown()
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message)
     } finally {
       setLoading(false)
@@ -72,14 +67,14 @@ const SignUp: React.FC<SignUpProps> = ({ onSwitch, onSuccess }) => {
       const data = await res.json()
       if (!res.ok) throw new Error(data.message || "Failed to resend OTP")
       startCooldown()
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message)
     } finally {
       setLoading(false)
     }
   }
 
-  const handleVerifyOtp = async (e: React.FormEvent) => {
+  const handleVerifyOtp = async (e) => {
     e.preventDefault()
     setError("")
     setLoading(true)
@@ -93,7 +88,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSwitch, onSuccess }) => {
       if (!res.ok) throw new Error(data.message || "Registration failed")
       localStorage.setItem("token", data.token)
       onSuccess?.(data.token)
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message)
     } finally {
       setLoading(false)
@@ -233,7 +228,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSwitch, onSuccess }) => {
   )
 }
 
-const s: Record<string, React.CSSProperties> = {
+const s = {
   page: { minHeight: "100vh", background: "linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0f172a 100%)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Inter', 'Segoe UI', sans-serif", padding: "24px 16px" },
   card: { background: "#1e293b", border: "1px solid #334155", borderRadius: 16, padding: "40px 36px", width: "100%", maxWidth: 420, boxShadow: "0 25px 50px rgba(0,0,0,0.4)" },
   logoRow: { display: "flex", alignItems: "center", gap: 10, marginBottom: 28, justifyContent: "center" },
@@ -245,8 +240,8 @@ const s: Record<string, React.CSSProperties> = {
   form: { display: "flex", flexDirection: "column", gap: 18 },
   field: { display: "flex", flexDirection: "column", gap: 6 },
   label: { fontSize: 13, fontWeight: 500, color: "#cbd5e1" },
-  input: { background: "#0f172a", border: "1px solid #334155", borderRadius: 8, padding: "11px 14px", color: "#f1f5f9", fontSize: 14, outline: "none", width: "100%", boxSizing: "border-box" as const, transition: "border-color 0.15s" },
-  inputFocus: { background: "#0f172a", border: "1px solid #2563eb", borderRadius: 8, padding: "11px 14px", color: "#f1f5f9", fontSize: 14, outline: "none", width: "100%", boxSizing: "border-box" as const },
+  input: { background: "#0f172a", border: "1px solid #334155", borderRadius: 8, padding: "11px 14px", color: "#f1f5f9", fontSize: 14, outline: "none", width: "100%", boxSizing: "border-box", transition: "border-color 0.15s" },
+  inputFocus: { background: "#0f172a", border: "1px solid #2563eb", borderRadius: 8, padding: "11px 14px", color: "#f1f5f9", fontSize: 14, outline: "none", width: "100%", boxSizing: "border-box" },
   passwordWrap: { position: "relative" },
   eyeBtn: { position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center" },
   strengthWrap: { display: "flex", alignItems: "center", gap: 8, marginTop: 4 },
@@ -258,7 +253,7 @@ const s: Record<string, React.CSSProperties> = {
   switchText: { marginTop: 22, textAlign: "center", fontSize: 13, color: "#94a3b8" },
   switchLink: { background: "none", border: "none", color: "#3b82f6", cursor: "pointer", fontSize: 13, fontWeight: 500, padding: 0 },
   resendRow: { display: "flex", justifyContent: "center", alignItems: "center", gap: 4, marginTop: 16 },
-  backBtn: { display: "block", width: "100%", marginTop: 10, background: "none", border: "none", color: "#64748b", fontSize: 13, cursor: "pointer", textAlign: "center" as const, padding: "6px 0" },
+  backBtn: { display: "block", width: "100%", marginTop: 10, background: "none", border: "none", color: "#64748b", fontSize: 13, cursor: "pointer", textAlign: "center", padding: "6px 0" },
 }
 
 export default SignUp

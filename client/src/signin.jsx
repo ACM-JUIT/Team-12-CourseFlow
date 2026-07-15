@@ -1,18 +1,13 @@
-import React, { useState } from "react"
+import { useState } from "react"
 
-interface SignInProps {
-  onSwitch: () => void
-  onSuccess?: (token: string) => void
-}
-
-const SignIn: React.FC<SignInProps> = ({ onSwitch, onSuccess }) => {
+function SignIn({ onSwitch, onSuccess }) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
     setLoading(true)
@@ -26,7 +21,7 @@ const SignIn: React.FC<SignInProps> = ({ onSwitch, onSuccess }) => {
       if (!res.ok) throw new Error(data.message || "Login failed")
       localStorage.setItem("token", data.token)
       onSuccess?.(data.token)
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message)
     } finally {
       setLoading(false)
@@ -103,7 +98,7 @@ const SignIn: React.FC<SignInProps> = ({ onSwitch, onSuccess }) => {
   )
 }
 
-const s: Record<string, React.CSSProperties> = {
+const s = {
   page: { minHeight: "100vh", background: "linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0f172a 100%)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Inter', 'Segoe UI', sans-serif", padding: "24px 16px" },
   card: { background: "#1e293b", border: "1px solid #334155", borderRadius: 16, padding: "40px 36px", width: "100%", maxWidth: 420, boxShadow: "0 25px 50px rgba(0,0,0,0.4)" },
   logoRow: { display: "flex", alignItems: "center", gap: 10, marginBottom: 28, justifyContent: "center" },
@@ -115,8 +110,8 @@ const s: Record<string, React.CSSProperties> = {
   form: { display: "flex", flexDirection: "column", gap: 18 },
   field: { display: "flex", flexDirection: "column", gap: 6 },
   label: { fontSize: 13, fontWeight: 500, color: "#cbd5e1" },
-  input: { background: "#0f172a", border: "1px solid #334155", borderRadius: 8, padding: "11px 14px", color: "#f1f5f9", fontSize: 14, outline: "none", width: "100%", boxSizing: "border-box" as const, transition: "border-color 0.15s" },
-  inputFocus: { background: "#0f172a", border: "1px solid #2563eb", borderRadius: 8, padding: "11px 14px", color: "#f1f5f9", fontSize: 14, outline: "none", width: "100%", boxSizing: "border-box" as const },
+  input: { background: "#0f172a", border: "1px solid #334155", borderRadius: 8, padding: "11px 14px", color: "#f1f5f9", fontSize: 14, outline: "none", width: "100%", boxSizing: "border-box", transition: "border-color 0.15s" },
+  inputFocus: { background: "#0f172a", border: "1px solid #2563eb", borderRadius: 8, padding: "11px 14px", color: "#f1f5f9", fontSize: 14, outline: "none", width: "100%", boxSizing: "border-box" },
   passwordWrap: { position: "relative" },
   eyeBtn: { position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center" },
   submitBtn: { marginTop: 6, background: "linear-gradient(135deg, #2563eb, #3b82f6)", color: "#fff", border: "none", borderRadius: 8, padding: "13px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%", letterSpacing: "0.1px" },

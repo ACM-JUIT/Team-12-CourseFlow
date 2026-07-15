@@ -1,13 +1,13 @@
-﻿import React, { useState } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import SignIn from "./signin"
 import SignUp from "./signup"
 
-const AuthPage: React.FC = () => {
-  const [mode, setMode] = useState<"signin" | "signup">("signin")
+function AuthPage() {
+  const [mode, setMode] = useState("signin")
   const navigate = useNavigate()
 
-  const handleSuccess = (token: string) => {
+  const handleSuccess = (token) => {
     localStorage.setItem("token", token)
     navigate("/dashboard")
   }

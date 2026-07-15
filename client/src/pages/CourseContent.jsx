@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./CourseContent.css";
 import CodeSnippet from "../components/CodeSnippet";
-import { getCourseContent } from "../api/courseApi";
+import { getCourseContent } from "../api/courseContentApi";
 
 
 function ClockIcon() {
