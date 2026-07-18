@@ -33,6 +33,23 @@ const courseSchema = new mongoose.Schema(
       type: String, // URL or file path
     },
 
+    // AI-generated content (from generate-content endpoint)
+    modules: [
+      {
+        title: { type: String },
+        chapters: [{ type: String }],
+      },
+    ],
+    videos: [
+      {
+        title: { type: String },
+        channel: { type: String },
+        videoId: { type: String },
+        url: { type: String },
+        thumbnail: { type: String },
+      },
+    ],
+
     // Bookkeeping
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,

@@ -12,6 +12,7 @@ import "./App.css";
 
 function AppDashboard() {
   const [currentPage, setCurrentPage] = useState("dashboard");
+  const [selectedCourseId, setSelectedCourseId] = useState(null);
 
   const renderPage = () => {
     switch (currentPage) {
@@ -20,11 +21,17 @@ function AppDashboard() {
           <Dashboard
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
+            setSelectedCourseId={setSelectedCourseId}
           />
         );
 
       case "create-course":
-        return <CreateCourse />;
+  return (
+    <CreateCourse
+      setCurrentPage={setCurrentPage}
+      setSelectedCourseId={setSelectedCourseId}
+    />
+  );
 
       case "delete-course":
         return (
@@ -35,13 +42,14 @@ function AppDashboard() {
         );
 
       case "course-page":
-        return <CoursePage />;
+        return <CoursePage courseId={selectedCourseId} />;
 
       default:
         return (
           <Dashboard
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
+            setSelectedCourseId={setSelectedCourseId}
           />
         );
     }

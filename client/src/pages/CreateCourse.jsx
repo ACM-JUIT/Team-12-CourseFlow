@@ -6,7 +6,7 @@ import OptionsStep from "../components/OptionsStep";
 import { createCourse, updateCourse, publishCourse } from "../api/courseApi";
 import "./CreateCourse.css";
 
-export default function CreateCourse() {
+export default function CreateCourse({ setCurrentPage, setSelectedCourseId }) {
   const [step, setStep] = useState(1);
   const [courseId, setCourseId] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -20,6 +20,8 @@ export default function CreateCourse() {
     duration: "",
     chapters: "",
     video: "",
+    modules: [],
+    videos: [],
   });
 
   const handleBack = () => {
@@ -49,13 +51,15 @@ export default function CreateCourse() {
       return;
     }
 
-    // Step 2 -> 3: save topic/description onto the existing course
+    // Step 2 -> 3: save topic/description/AI-generated content onto the existing course
     if (step === 2) {
       try {
         setLoading(true);
         await updateCourse(courseId, {
           topic: formData.topic,
           description: formData.description,
+          modules: formData.modules,
+          videos: formData.videos,
         });
         setStep(3);
       } catch (err) {
@@ -77,8 +81,9 @@ export default function CreateCourse() {
         chapters: formData.chapters,
         video: formData.video,
       });
-      // Course is now published - navigate away, show a success state, reset the form, etc.
-      alert("Course created successfully!");
+      // Redirect straight to the newly created course
+      setSelectedCourseId(courseId);
+      setCurrentPage("course-page");
     } catch (err) {
       setError(err.message);
     } finally {

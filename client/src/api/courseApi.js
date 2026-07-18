@@ -53,3 +53,21 @@ export async function publishCourse(id, data) {
 
   return res.json();
 }
+
+// AI-assisted content generation: fetch real sources + structure into a course draft
+export async function generateCourseContent(topic) {
+  const res = await fetch(`${BASE_URL}/generate-content`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ topic }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || err.message || "Failed to generate course content");
+  }
+
+  return res.json();
+}

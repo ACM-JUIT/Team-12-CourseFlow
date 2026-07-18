@@ -1,44 +1,44 @@
 import { useEffect, useState } from "react";
 import "./CoursePage.css";
 
-const COURSE_ID = "516d05dd-0e73-4a8d-96ab-755a5a1517af";
-const API_BASE  = "http://localhost:5000/api";
+const API_BASE = "http://localhost:5000/api";
 
-// ── Change this to your team's page route when it is ready ──────────────────
-const START_URL = `/course/${COURSE_ID}/learn`;
-
-export default function CoursePage() {
-  const [course,  setCourse]  = useState(null);
+export default function CoursePage({ courseId }) {
+  const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState(null);
-  const [copied,  setCopied]  = useState(false);
+  const [error, setError] = useState(null);
+  const [copied, setCopied] = useState(false);
 
-  // ── Fetch course ────────────────────────────────────────────────────────────
   useEffect(() => {
-    fetch(`${API_BASE}/courses/${COURSE_ID}`)
+    if (!courseId) {
+      setError("No course selected");
+      setLoading(false);
+      return;
+    }
+
+    fetch(`${API_BASE}/courses/${courseId}`)
       .then((r) => {
         if (!r.ok) throw new Error("Failed to load course");
         return r.json();
       })
-      .then((json) => { setCourse(json.data); setLoading(false); })
-      .catch((err) => { setError(err.message); setLoading(false); });
-  }, []);
+      .then((data) => {
+        setCourse(data); // getCourseById returns the raw course object
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, [courseId]);
 
-  // ── Copy URL ────────────────────────────────────────────────────────────────
   const handleCopy = () => {
-    const url = `https://www.courseflow.tech/course/${COURSE_ID}`;
+    const url = `https://www.courseflow.tech/course/${courseId}`;
     navigator.clipboard.writeText(url).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
   };
 
-  // ── Start → redirect to team's page ─────────────────────────────────────────
-  const handleStart = () => {
-    window.location.href = START_URL;
-  };
-
-  // ── States ──────────────────────────────────────────────────────────────────
   if (loading) return (
     <div className="cp-center">
       <div className="cp-spinner" />
@@ -54,15 +54,17 @@ export default function CoursePage() {
     </div>
   );
 
-  const courseUrl = `https://www.courseflow.tech/course/${COURSE_ID}`;
+  const courseUrl = `https://www.courseflow.tech/course/${courseId}`;
+  const modules = course.modules || [];
+  const videos = course.videos || [];
 
   return (
     <div className="cp-page">
 
-      {/* ── Hero Card ─────────────────────────────────────────────────────── */}
+      {/* ── Hero Card ─────────────────────────────────────────────────── */}
       <div className="cp-card cp-hero">
         <div className="cp-hero-left">
-          <h1 className="cp-title">{course.title}</h1>
+          <h1 className="cp-title">{course.topic || "(untitled course)"}</h1>
           <p className="cp-desc">{course.description}</p>
 
           <div className="cp-category">
@@ -71,74 +73,25 @@ export default function CoursePage() {
             </svg>
             <span>{course.category}</span>
           </div>
-
-          <button className="cp-start-btn" onClick={handleStart}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M5 3l14 9-14 9V3z"/>
-            </svg>
-            Start
-          </button>
-        </div>
-
-        <div className="cp-hero-right">
-          <img
-            src={course.image}
-            alt={course.title}
-            className="cp-course-img"
-            onError={(e) => { e.target.src = "https://via.placeholder.com/480x280?text=C%2B%2B"; }}
-          />
         </div>
       </div>
 
-      {/* ── Stats ─────────────────────────────────────────────────────────── */}
+      {/* ── Stats ─────────────────────────────────────────────────────── */}
       <div className="cp-card cp-stats">
         {[
-          {
-            icon: (
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-              </svg>
-            ),
-            label: "Skill Level",
-            value: course.skillLevel,
-          },
-          {
-            icon: (
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-              </svg>
-            ),
-            label: "Duration",
-            value: course.duration,
-          },
-          {
-            icon: (
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2">
-                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-              </svg>
-            ),
-            label: "No of Chapters",
-            value: course.chaptersCount,
-          },
-          {
-            icon: (
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2">
-                <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
-              </svg>
-            ),
-            label: "Videos Included?",
-            value: course.videosIncluded ? "Yes" : "No",
-          },
+          { label: "Difficulty", value: course.difficulty || "—" },
+          { label: "Duration", value: course.duration || "—" },
+          { label: "No of Modules", value: modules.length },
+          { label: "Videos Included?", value: videos.length > 0 ? "Yes" : "No" },
         ].map((stat, i) => (
           <div className="cp-stat-item" key={i}>
-            <div className="cp-stat-icon">{stat.icon}</div>
             <p className="cp-stat-label">{stat.label}</p>
             <p className="cp-stat-value">{stat.value}</p>
           </div>
         ))}
       </div>
 
-      {/* ── Course URL ────────────────────────────────────────────────────── */}
+      {/* ── Course URL ────────────────────────────────────────────────── */}
       <div className="cp-card">
         <p className="cp-url-label">Course URL:</p>
         <div className="cp-url-row">
@@ -150,41 +103,74 @@ export default function CoursePage() {
             onClick={handleCopy}
             title="Copy URL"
           >
-            {copied ? (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            ) : (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-              </svg>
-            )}
+            {copied ? "Copied!" : "Copy"}
           </button>
         </div>
       </div>
 
-      {/* ── Chapters ──────────────────────────────────────────────────────── */}
+      {/* ── Modules & Chapters ────────────────────────────────────────── */}
       <div className="cp-card">
-        <h2 className="cp-chapters-heading">Chapters</h2>
-        <div className="cp-chapters-list">
-          {course.chapters.map((ch) => (
-            <div className="cp-chapter-card" key={ch.id}>
-              <div className="cp-chapter-num">{ch.id}</div>
-              <div className="cp-chapter-body">
-                <h3 className="cp-chapter-title">{ch.title}</h3>
-                <p className="cp-chapter-desc">{ch.description}</p>
-                <div className="cp-chapter-duration">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                  </svg>
-                  <span>{ch.duration}</span>
+        <h2 className="cp-chapters-heading">Modules</h2>
+        {modules.length === 0 ? (
+          <p>No modules generated yet for this course.</p>
+        ) : (
+          <div className="cp-chapters-list">
+            {modules.map((mod, i) => (
+              <div className="cp-chapter-card" key={i}>
+                <div className="cp-chapter-num">{i + 1}</div>
+                <div className="cp-chapter-body">
+                  <h3 className="cp-chapter-title">{mod.title}</h3>
+                  <ul>
+                    {(mod.chapters || []).map((ch, j) => (
+                      <li key={j} style={{ fontSize: "14px", color: "#475569" }}>{ch}</li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
+
+      {/* ── Videos ────────────────────────────────────────────────────── */}
+     {videos.length > 0 && (
+  <div className="cp-card">
+    <h2 className="cp-chapters-heading">Videos</h2>
+    <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+      {videos.map((v, i) => {
+        const cardStyle = {
+          flex: "0 0 220px",
+          width: "220px",
+          textDecoration: "none",
+          color: "inherit",
+          display: "block",
+        };
+        const imgWrapStyle = {
+          width: "100%",
+          height: "124px",
+          borderRadius: "8px",
+          overflow: "hidden",
+          background: "#f1f5f9",
+        };
+        const imgStyle = {
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          display: "block",
+        };
+        return (
+          <a key={i} href={v.url} target="_blank" rel="noopener noreferrer" style={cardStyle}>
+            <div style={imgWrapStyle}>
+              <img src={v.thumbnail} alt={v.title} style={imgStyle} />
+            </div>
+            <p style={{ fontSize: "13px", fontWeight: 600, marginTop: "8px", lineHeight: 1.3 }}>{v.title}</p>
+            <p style={{ fontSize: "12px", color: "#94a3b8", marginTop: "2px" }}>{v.channel}</p>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+)}
 
     </div>
   );
