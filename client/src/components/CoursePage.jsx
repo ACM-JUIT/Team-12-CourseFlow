@@ -8,6 +8,7 @@ export default function CoursePage({ courseId }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [openModuleIndex, setOpenModuleIndex] = useState(null);
 
   useEffect(() => {
     if (!courseId) {
@@ -22,7 +23,7 @@ export default function CoursePage({ courseId }) {
         return r.json();
       })
       .then((data) => {
-        setCourse(data); // getCourseById returns the raw course object
+        setCourse(data);
         setLoading(false);
       })
       .catch((err) => {
@@ -56,7 +57,7 @@ export default function CoursePage({ courseId }) {
 
   const courseUrl = `https://www.courseflow.tech/course/${courseId}`;
   const modules = course.modules || [];
-  const videos = course.videos || [];
+  const totalVideos = modules.reduce((sum, m) => sum + (m.videos?.length || 0), 0);
 
   return (
     <div className="cp-page">
@@ -82,7 +83,7 @@ export default function CoursePage({ courseId }) {
           { label: "Difficulty", value: course.difficulty || "—" },
           { label: "Duration", value: course.duration || "—" },
           { label: "No of Modules", value: modules.length },
-          { label: "Videos Included?", value: videos.length > 0 ? "Yes" : "No" },
+          { label: "Videos Included?", value: totalVideos > 0 ? "Yes" : "No" },
         ].map((stat, i) => (
           <div className="cp-stat-item" key={i}>
             <p className="cp-stat-label">{stat.label}</p>
@@ -108,69 +109,71 @@ export default function CoursePage({ courseId }) {
         </div>
       </div>
 
-      {/* ── Modules & Chapters ────────────────────────────────────────── */}
+      {/* ── Modules (with nested chapters + videos) ──────────────────── */}
       <div className="cp-card">
         <h2 className="cp-chapters-heading">Modules</h2>
         {modules.length === 0 ? (
           <p>No modules generated yet for this course.</p>
         ) : (
           <div className="cp-chapters-list">
-            {modules.map((mod, i) => (
-              <div className="cp-chapter-card" key={i}>
-                <div className="cp-chapter-num">{i + 1}</div>
-                <div className="cp-chapter-body">
-                  <h3 className="cp-chapter-title">{mod.title}</h3>
-                  <ul>
-                    {(mod.chapters || []).map((ch, j) => (
-                      <li key={j} style={{ fontSize: "14px", color: "#475569" }}>{ch}</li>
-                    ))}
-                  </ul>
+            {modules.map((mod, i) => {
+              const isOpen = openModuleIndex === i;
+              const modVideos = mod.videos || [];
+              return (
+                <div
+                  key={i}
+                  className="cp-chapter-card"
+                  style={{ flexDirection: "column", alignItems: "stretch", cursor: "pointer" }}
+                  onClick={() => setOpenModuleIndex(isOpen ? null : i)}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <div className="cp-chapter-num">{i + 1}</div>
+                    <h3 className="cp-chapter-title" style={{ margin: 0, flex: 1 }}>{mod.title}</h3>
+                    <span style={{ fontSize: "18px" }}>{isOpen ? "−" : "+"}</span>
+                  </div>
+
+                  {isOpen && (
+                    <div style={{ marginTop: "16px", paddingLeft: "44px" }} onClick={(e) => e.stopPropagation()}>
+
+                      {/* Chapters with full content */}
+                      {(mod.chapters || []).map((ch, j) => (
+                        <div key={j} style={{ marginBottom: "16px" }}>
+                          <h4 style={{ fontSize: "15px", fontWeight: 600, marginBottom: "4px" }}>{ch.title}</h4>
+                          <p style={{ fontSize: "14px", color: "#475569", lineHeight: 1.6, margin: 0 }}>{ch.content}</p>
+                        </div>
+                      ))}
+
+                      {/* Videos for this module */}
+                      {modVideos.length > 0 && (
+                        <div style={{ marginTop: "20px" }}>
+                          <h4 style={{ fontSize: "14px", fontWeight: 600, marginBottom: "10px" }}>Related Videos</h4>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
+                            {modVideos.map((v, k) => {
+                              const cardStyle = { flex: "0 0 200px", width: "200px", textDecoration: "none", color: "inherit", display: "block" };
+                              const imgWrapStyle = { width: "100%", height: "112px", borderRadius: "8px", overflow: "hidden", background: "#f1f5f9" };
+                              const imgStyle = { width: "100%", height: "100%", objectFit: "cover", display: "block" };
+                              return (
+                                <a key={k} href={v.url} target="_blank" rel="noopener noreferrer" style={cardStyle}>
+                                  <div style={imgWrapStyle}>
+                                    <img src={v.thumbnail} alt={v.title} style={imgStyle} />
+                                  </div>
+                                  <p style={{ fontSize: "12px", fontWeight: 600, marginTop: "6px", lineHeight: 1.3 }}>{v.title}</p>
+                                  <p style={{ fontSize: "11px", color: "#94a3b8", marginTop: "2px" }}>{v.channel}</p>
+                                </a>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
-
-      {/* ── Videos ────────────────────────────────────────────────────── */}
-     {videos.length > 0 && (
-  <div className="cp-card">
-    <h2 className="cp-chapters-heading">Videos</h2>
-    <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
-      {videos.map((v, i) => {
-        const cardStyle = {
-          flex: "0 0 220px",
-          width: "220px",
-          textDecoration: "none",
-          color: "inherit",
-          display: "block",
-        };
-        const imgWrapStyle = {
-          width: "100%",
-          height: "124px",
-          borderRadius: "8px",
-          overflow: "hidden",
-          background: "#f1f5f9",
-        };
-        const imgStyle = {
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          display: "block",
-        };
-        return (
-          <a key={i} href={v.url} target="_blank" rel="noopener noreferrer" style={cardStyle}>
-            <div style={imgWrapStyle}>
-              <img src={v.thumbnail} alt={v.title} style={imgStyle} />
-            </div>
-            <p style={{ fontSize: "13px", fontWeight: 600, marginTop: "8px", lineHeight: 1.3 }}>{v.title}</p>
-            <p style={{ fontSize: "12px", color: "#94a3b8", marginTop: "2px" }}>{v.channel}</p>
-          </a>
-        );
-      })}
-    </div>
-  </div>
-)}
 
     </div>
   );

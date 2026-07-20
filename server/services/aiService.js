@@ -1,20 +1,27 @@
 const axios = require('axios');
 
-async function generateCourseContent(topic, searchResults) {
+async function generateCourseContent(topic, searchResults, moduleCount = 5) {
   const context = searchResults
     .map((r, i) => `Source ${i + 1}: ${r.title}\n${r.snippet}`)
     .join('\n\n');
 
-  const prompt = `You are a course content generator. Using the sources below, create structured course content on "${topic}".
+  const prompt = `You are a course content generator. Using the sources below, create structured, in-depth course content on "${topic}".
 
 ${context}
+
+Create EXACTLY ${moduleCount} modules — not more, not fewer. Each module must have 3-5 chapters. For EACH chapter, write a "content" field with a detailed explanation of 4-6 sentences (at least 60 words) covering what the chapter teaches, key concepts, and why it matters. Do not just restate the chapter title — explain it substantively, as if writing real course material.
 
 Return ONLY valid JSON in this exact shape, no markdown, no commentary, no code fences:
 {
   "title": "...",
   "description": "...",
   "modules": [
-    { "title": "...", "chapters": ["...", "..."] }
+    {
+      "title": "...",
+      "chapters": [
+        { "title": "...", "content": "..." }
+      ]
+    }
   ]
 }`;
 
@@ -23,9 +30,10 @@ Return ONLY valid JSON in this exact shape, no markdown, no commentary, no code 
     response = await axios.post(
       'https://api.groq.com/openai/v1/chat/completions',
       {
-        model: 'openai/gpt-oss-20b',
+        model: 'llama-3.1-8b-instant',
         messages: [{ role: 'user', content: prompt }],
-        temperature: 0.4
+        temperature: 0.5,
+        max_tokens: 4096
       },
       { headers: { Authorization: `Bearer ${process.env.GROQ_API_KEY}`, 'Content-Type': 'application/json' } }
     );
@@ -44,12 +52,19 @@ Return ONLY valid JSON in this exact shape, no markdown, no commentary, no code 
     raw = raw.slice(firstBrace, lastBrace + 1);
   }
 
+  let parsed;
   try {
-    return JSON.parse(raw);
+    parsed = JSON.parse(raw);
   } catch (err) {
     console.error('Failed to parse response:', raw);
     throw new Error('AI returned invalid JSON');
   }
+
+  if (Array.isArray(parsed.modules) && parsed.modules.length > moduleCount) {
+    parsed.modules = parsed.modules.slice(0, moduleCount);
+  }
+
+  return parsed;
 }
 
 module.exports = { generateCourseContent };

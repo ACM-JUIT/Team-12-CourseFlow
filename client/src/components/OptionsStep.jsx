@@ -39,20 +39,6 @@ export default function OptionsStep({
         <option value="No">No</option>
       </select>
 
-      <input
-        type="number"
-        placeholder="Chapters"
-        min="1"
-        value={formData.chapters}
-        onChange={(e) => {
-         const val = e.target.value;
-    
-         if (val === "" || Number(val) > 0) {
-         setFormData({ ...formData, chapters: val });
-          }
-        }}
-      />
-
     </div>
   );
 }

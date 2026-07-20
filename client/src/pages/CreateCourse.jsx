@@ -59,7 +59,6 @@ export default function CreateCourse({ setCurrentPage, setSelectedCourseId }) {
           topic: formData.topic,
           description: formData.description,
           modules: formData.modules,
-          videos: formData.videos,
         });
         setStep(3);
       } catch (err) {
