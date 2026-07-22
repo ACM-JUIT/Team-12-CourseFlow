@@ -5,6 +5,7 @@ import "./Dashboard.css";
 function Dashboard({
   currentPage,
   setCurrentPage,
+  setSelectedCourseId,
 }) {
   const [user, setUser] = useState({
     name: "",
@@ -14,25 +15,24 @@ function Dashboard({
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
-    // 1. LocalStorage se user info load karna
     const storedUser = localStorage.getItem("courseflow_user");
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       setUser(parsedUser);
-
-      // 2. Sirf logged-in user ke specific courses backend se mangwana
-      if (parsedUser.email) {
-        fetch(`http://localhost:5000/api/dashboard/courses?email=${parsedUser.email}`)
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.success) {
-              setCourses(data.courses);
-            }
-          })
-          .catch((err) => console.error("Error fetching dashboard data:", err));
-      }
     }
+
+    fetch(`http://localhost:5000/api/courses`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCourses(Array.isArray(data) ? data : []);
+      })
+      .catch((err) => console.error("Error fetching dashboard data:", err));
   }, []);
+
+  const handleCourseClick = (courseId) => {
+    setSelectedCourseId(courseId);
+    setCurrentPage("course-page");
+  };
 
   return (
     <div className="layout">
@@ -66,7 +66,6 @@ function Dashboard({
           </div>
         </div>
 
-        {/* Dynamic Courses Display */}
         <div className="activity-card">
           <h3>Your Courses ({courses.length})</h3>
 
@@ -79,18 +78,20 @@ function Dashboard({
             <div style={{ marginTop: "15px" }}>
               {courses.map((course) => (
                 <div
-                  key={course.id}
+                  key={course._id}
+                  onClick={() => handleCourseClick(course._id)}
                   style={{
                     padding: "10px",
                     borderBottom: "1px solid #eee",
                     display: "flex",
-                    justifyContent: "space-between"
+                    justifyContent: "space-between",
+                    cursor: "pointer",
                   }}
                 >
                   <div>
-                    <strong>{course.title}</strong>
+                    <strong>{course.topic || "(untitled)"}</strong>
                     <p style={{ margin: 0, fontSize: "14px", color: "#666" }}>
-                      Instructor: {course.instructor}
+                      {course.category} · {course.status}
                     </p>
                   </div>
                 </div>

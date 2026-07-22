@@ -2,14 +2,11 @@ const mongoose = require("mongoose");
 
 const courseSchema = new mongoose.Schema(
   {
-    // Step 1: Category
     category: {
       type: String,
       required: true,
       enum: ["Coding", "Health", "Creative", "Business"],
     },
-
-    // Step 2: Topic
     topic: {
       type: String,
       trim: true,
@@ -18,25 +15,41 @@ const courseSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-
-    // Step 3: Options
     difficulty: {
       type: String,
     },
     duration: {
-      type: String, // e.g. "4 weeks", "10 hours"
+      type: String,
     },
     chapters: {
-      type: String, // change to Number if OptionsStep uses a number input
+      type: String,
     },
     video: {
-      type: String, // URL or file path
+      type: String,
     },
-
-    // Bookkeeping
+    modules: [
+      {
+        title: { type: String },
+        chapters: [
+          {
+            title: { type: String },
+            content: { type: String },
+          },
+        ],
+        videos: [
+          {
+            title: { type: String },
+            channel: { type: String },
+            videoId: { type: String },
+            url: { type: String },
+            thumbnail: { type: String },
+          },
+        ],
+      },
+    ],
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // will link up once auth teammate's User model exists
+      ref: "User",
     },
     status: {
       type: String,
@@ -44,7 +57,7 @@ const courseSchema = new mongoose.Schema(
       default: "draft",
     },
     currentStep: {
-      type: Number, // 1, 2, or 3 - lets the frontend resume an in-progress wizard
+      type: Number,
       default: 1,
     },
   },
